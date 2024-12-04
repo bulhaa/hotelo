@@ -42,7 +42,8 @@ CREATE TABLE `bookings` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   `created_by` int(11) NOT NULL,
-  `updated_by` int(11) NOT NULL
+  `updated_by` int(11) NOT NULL,
+  `status` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
