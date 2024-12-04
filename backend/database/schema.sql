@@ -27,6 +27,8 @@ SET time_zone = "+00:00";
 -- Table structure for table `bookings`
 --
 
+DROP TABLE `bookings`;
+
 CREATE TABLE `bookings` (
   `id` int(11) NOT NULL,
   `arrival_date` datetime NOT NULL,
@@ -38,7 +40,9 @@ CREATE TABLE `bookings` (
   `children` int(11) NOT NULL,
   `source` int(11) NOT NULL,
   `created_at` datetime NOT NULL,
-  `logged_at` datetime NOT NULL
+  `updated_at` datetime NOT NULL,
+  `created_by` int(11) NOT NULL,
+  `updated_by` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
