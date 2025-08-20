@@ -39,45 +39,26 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute' => 'id',
                     'options' => ['style' => 'width: 5%'],
                 ],
-                // 'bookingname',
-                // 'email:email',
+            'arrival_date',
+            'departure_date',
+            'booking_date',
+            'total_price',
+            'meal',
+            'adults',
+            'children',
+            'source',
+            'created_at',
+            'updated_at',
+            'created_by',
+            'updated_by',
+            'status',
+
                 [
                     'class' => EnumColumn::class,
                     'attribute' => 'status',
                     'enum' => Booking::statuses(),
                     'filter' => Booking::statuses()
                 ],
-                [
-                    'attribute' => 'created_at',
-                    'format' => 'datetime',
-                    'filter' => DatePicker::widget([
-                        'model' => $searchModel,
-                        'attribute' => 'created_at',
-                        'type' => DatePicker::TYPE_COMPONENT_APPEND,
-                        'pluginOptions' => [
-                            'format' => 'dd-mm-yyyy',
-                            'showMeridian' => true,
-                            'todayBtn' => true,
-                            'endDate' => '0d',
-                        ]
-                    ]),
-                ],
-                [
-                    'attribute' => 'logged_at',
-                    'format' => 'datetime',
-                    'filter' => DatePicker::widget([
-                        'model' => $searchModel,
-                        'attribute' => 'logged_at',
-                        'type' => DatePicker::TYPE_COMPONENT_APPEND,
-                        'pluginOptions' => [
-                            'format' => 'dd-mm-yyyy',
-                            'showMeridian' => true,
-                            'todayBtn' => true,
-                            'endDate' => '0d',
-                        ]
-                    ]),
-                ],
-                // 'updated_at',
 
                 [
                     'class' => \common\widgets\ActionColumn::class,

@@ -30,30 +30,70 @@ SET time_zone = "+00:00";
 DROP TABLE `bookings`;
 
 CREATE TABLE `bookings` (
-  `id` int(11) NOT NULL,
-  `arrival_date` datetime NOT NULL,
-  `departure_date` datetime NOT NULL,
-  `booking_date` datetime NOT NULL,
-  `total_price` decimal(10,0) NOT NULL,
-  `meal` int(11) NOT NULL,
-  `adults` int(11) NOT NULL,
-  `children` int(11) NOT NULL,
-  `source` int(11) NOT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
-  `created_by` int(11) NOT NULL,
-  `updated_by` int(11) NOT NULL,
-  `status` int(11) NOT NULL
+  `id` int(11) NULL DEFAULT NULL,
+  `arrival_date` datetime NULL DEFAULT NULL,
+  `departure_date` datetime NULL DEFAULT NULL,
+  `booking_date` datetime NULL DEFAULT NULL,
+  `total_price` decimal(10,0) NULL DEFAULT NULL,
+  `meal` int(11) NULL DEFAULT NULL,
+  `adults` int(11) NULL DEFAULT NULL,
+  `children` int(11) NULL DEFAULT NULL,
+  `source` int(11) NULL DEFAULT NULL,
+  `created_at` datetime NULL DEFAULT NULL,
+  `updated_at` datetime NULL DEFAULT NULL,
+  `created_by` int(11) NULL DEFAULT NULL,
+  `updated_by` int(11) NULL DEFAULT NULL,
+  `status` int(11) NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Indexes for dumped tables
 --
 
+CREATE TABLE `meals` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `sources` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `statuses` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+INSERT INTO `meals` (`id`, `name`) VALUES
+(1, 'Breakfast'),
+(2, 'Half-board'),
+(3, 'Full-board');
+
+INSERT INTO `sources` (`id`, `name`) VALUES
+(1, 'Agoda'),
+(2, 'Booking.com'),
+(3, 'Expedia');
+
+INSERT INTO `statuses` (`id`, `name`) VALUES
+(1, 'Pending'),
+(2, 'Approved');
+
+
 --
 -- Indexes for table `bookings`
 --
 ALTER TABLE `bookings`
+  ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `meals`
+  ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `sources`
+  ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `statuses`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -65,6 +105,16 @@ ALTER TABLE `bookings`
 --
 ALTER TABLE `bookings`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `meals`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+ALTER TABLE `sources`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  
+ALTER TABLE `statuses`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

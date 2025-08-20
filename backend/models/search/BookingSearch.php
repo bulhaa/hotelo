@@ -17,9 +17,24 @@ class BookingSearch extends Booking
     public function rules()
     {
         return [
-            [['id', 'status'], 'integer'],
-            [['created_at', 'updated_at', 'logged_at'], 'default', 'value' => null],
-            [['bookingname', 'auth_key', 'password_hash', 'email'], 'safe'],
+            // [['arrival_date'], 'safe'],
+            [['arrival_date'], 'date'],
+            // [['departure_date'], 'safe'],
+            [['departure_date'], 'date'],
+            // [['booking_date'], 'safe'],
+            [['booking_date'], 'date'],
+            // [['total_price'], 'safe'],
+            // [['meal'], 'safe'],
+            [['meal'], 'integer'],
+            // [['adults'], 'safe'],
+            [['adults'], 'integer'],
+            // [['children'], 'safe'],
+            [['children'], 'integer'],
+            // [['source'], 'safe'],
+            [['source'], 'integer'],
+            // [['status'], 'safe'],
+            [['status'], 'integer'],
+
         ];
     }
 

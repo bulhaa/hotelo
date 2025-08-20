@@ -1,32 +1,41 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: zein
+ * Date: 7/4/14
+ * Time: 2:31 PM
+ */
 
 namespace backend\models\query;
 
-use common\models\Booking;
+use backend\models\Booking;
+use backend\models\BookingCategory;
 use yii\db\ActiveQuery;
 
-/**
- * Class BookingQuery
- * @package common\models\query
- * @author Eugene Terentev <eugene@terentev.net>
- */
 class BookingQuery extends ActiveQuery
 {
     /**
      * @return $this
      */
-    public function notDeleted()
+    public function published()
     {
-        $this->andWhere(['!=', 'status', Booking::STATUS_DELETED]);
+        $this->andWhere(['{{%booking}}.[[status]]' => Booking::STATUS_PUBLISHED]);
+        $this->andWhere(['<', '{{%booking}}.[[published_at]]', time()]);
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    public function active()
+    public function getFullArchive()
     {
-        $this->andWhere(['status' => Booking::STATUS_ACTIVE]);
+        $this->innerJoin('{{%booking_category}}', '{{%booking_category}}.[[id]] = {{%booking}}.[[category_id]]');
+        $this->select([
+            'YEAR(FROM_UNIXTIME({{%booking}}.[[published_at]])) AS [[year]]',
+            'MONTH(FROM_UNIXTIME({{%booking}}.[[published_at]])) AS [[month]]',
+            'COUNT(*) AS [[count]]'
+        ]);
+        $this->published();
+        $this->andWhere(['{{%booking_category}}.[[status]]' => BookingCategory::STATUS_ACTIVE]);
+        $this->groupBy('[[year]], [[month]]');
+        $this->orderBy('[[year]] DESC, [[month]] DESC');
         return $this;
     }
 }

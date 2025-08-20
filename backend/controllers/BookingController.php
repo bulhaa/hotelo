@@ -3,7 +3,7 @@
 namespace backend\controllers;
 
 use backend\models\search\BookingSearch;
-use backend\models\BookingForm;
+use backend\models\form\BookingForm;
 use common\models\Booking;
 use common\models\BookingToken;
 use Yii;
@@ -84,7 +84,7 @@ class BookingController extends Controller
     public function actionCreate()
     {
         $model = new BookingForm();
-        $model->setScenario('create');
+        // $model->setScenario('create');
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
         }

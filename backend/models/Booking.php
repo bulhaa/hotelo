@@ -13,26 +13,25 @@ use yii\db\ActiveRecord;
 /**
  * This is the model class for table "booking".
  *
- * @property integer             $id
- * @property string              $slug
- * @property string              $title
- * @property string              $body
- * @property string              $view
- * @property string              $thumbnail_base_url
- * @property string              $thumbnail_path
- * @property array               $attachments
- * @property integer             $category_id
- * @property integer             $status
- * @property integer             $published_at
- * @property integer             $created_by
- * @property integer             $updated_by
- * @property integer             $created_at
- * @property integer             $updated_at
+ * @property integer $id
+ * @property datetime $arrival_date
+ * @property datetime $departure_date
+ * @property datetime $booking_date
+ * @property decimal(10,0) $total_price
+ * @property integer $meal
+ * @property integer $adults
+ * @property integer $children
+ * @property integer $source
+ * @property datetime $created_at
+ * @property datetime $updated_at
+ * @property integer $created_by
+ * @property integer $updated_by
+ * @property integer $status
+
  *
  * @property User                $author
  * @property User                $updater
  * @property BookingCategory     $category
- * @property BookingAttachment[] $bookingAttachments
  */
 class Booking extends ActiveRecord
 {
@@ -54,7 +53,7 @@ class Booking extends ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%booking}}';
+        return '{{%bookings}}';
     }
 
     /**
@@ -89,24 +88,6 @@ class Booking extends ActiveRecord
             //     'attribute' => 'title',
             //     'immutable' => true,
             // ],
-            [
-                'class' => UploadBehavior::class,
-                'attribute' => 'attachments',
-                'multiple' => true,
-                'uploadRelation' => 'bookingAttachments',
-                'pathAttribute' => 'path',
-                'baseUrlAttribute' => 'base_url',
-                'orderAttribute' => 'order',
-                'typeAttribute' => 'type',
-                'sizeAttribute' => 'size',
-                'nameAttribute' => 'name',
-            ],
-            [
-                'class' => UploadBehavior::class,
-                'attribute' => 'thumbnail',
-                'pathAttribute' => 'thumbnail_path',
-                'baseUrlAttribute' => 'thumbnail_base_url',
-            ],
         ];
     }
 
@@ -116,19 +97,13 @@ class Booking extends ActiveRecord
     public function rules()
     {
         return [
-            // [['title', 'body', 'category_id'], 'required'],
-            // [['slug'], 'unique'],
-            [['body'], 'string'],
-            [['published_at'], 'default', 'value' => function () {
-                return date(DATE_ISO8601);
-            }],
-            [['published_at'], 'filter', 'filter' => 'strtotime', 'skipOnEmpty' => true],
-            [['category_id'], 'exist', 'targetClass' => BookingCategory::class, 'targetAttribute' => 'id'],
-            [['status', 'created_by', 'updated_by'], 'integer'],
-            [['thumbnail_base_url', 'thumbnail_path'], 'string', 'max' => 1024],
-            [['title'], 'string', 'max' => 512],
-            [['view', 'slug'], 'string', 'max' => 255],
-            [['attachments', 'thumbnail'], 'safe'],
+            [['total_price'], 'string'],
+            [['meal'], 'integer'],
+            [['adults'], 'integer'],
+            [['children'], 'integer'],
+            [['source'], 'integer'],
+            [['status'], 'integer'],
+
         ];
     }
 
@@ -138,51 +113,55 @@ class Booking extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('common', 'ID'),
-            'slug' => Yii::t('common', 'Slug'),
-            'title' => Yii::t('common', 'Title'),
-            'body' => Yii::t('common', 'Body'),
-            'view' => Yii::t('common', 'Booking View'),
-            'thumbnail' => Yii::t('common', 'Thumbnail'),
-            'category_id' => Yii::t('common', 'Category'),
-            'status' => Yii::t('common', 'Published'),
-            'published_at' => Yii::t('common', 'Published At'),
-            'created_by' => Yii::t('common', 'Author'),
-            'updated_by' => Yii::t('common', 'Updater'),
-            'created_at' => Yii::t('common', 'Created At'),
-            'updated_at' => Yii::t('common', 'Updated At'),
+            'arrival_date' => 'Arrival Date',
+            'departure_date' => 'Departure Date',
+            'booking_date' => 'Booking Date',
+            'total_price' => 'Total Price',
+            'meal' => 'Meal',
+            'adults' => 'Adults',
+            'children' => 'Children',
+            'source' => 'Source',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+            'created_by' => 'Created By',
+            'updated_by' => 'Updated By',
+            'status' => 'Status',
+
         ];
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * Get the user that owns the booking.
      */
-    public function getAuthor()
+    public function getCreatedBy()
     {
-        return $this->hasOne(User::class, ['id' => 'created_by']);
+        return $this->hasOne(User::className(), ['' => 'created_by']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUpdater()
-    {
-        return $this->hasOne(User::class, ['id' => 'updated_by']);
-    }
+    // /**
+    //  * Get the bookings for the user.
+    //  */
+    // public function getBookings()
+    // {
+    //     return $this->hasMany(Booking::className(), ['created_by' => '']);
+    // }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * Get the user that owns the booking.
      */
-    public function getCategory()
+    public function getUpdatedBy()
     {
-        return $this->hasOne(BookingCategory::class, ['id' => 'category_id']);
+        return $this->hasOne(User::className(), ['' => 'updated_by']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBookingAttachments()
-    {
-        return $this->hasMany(BookingAttachment::class, ['booking_id' => 'id']);
-    }
+    // /**
+    //  * Get the bookings for the user.
+    //  */
+    // public function getBookings()
+    // {
+    //     return $this->hasMany(Booking::className(), ['updated_by' => '']);
+    // }
+
+
+
 }
